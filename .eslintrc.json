@@ -11,6 +11,11 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "react/react-in-jsx-scope": "off"
+    "no-console": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/self-closing-comp": "off",
+    "react/require-default-props": "off",
+    "no-nested-ternary": "off",
+    "import/no-extraneous-dependencies": "off"
   }
 }
