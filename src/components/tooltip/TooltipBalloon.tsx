@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { useTooltip } from "./TooltipProvider";
 
 const StyledTooltipBalloon = styled.div<TooltipBalloonProps>`
-  position: fixed;
+  position: absolute;
   display: ${(props) => (props.show ? "block" : "none")};
   width: fit-content;
   height: fit-content;
