@@ -25,7 +25,7 @@
     </Tooltip>
  </TooltipProvider>
  ```
- TooltipBalloon에서 필요한 setHover, tooltip의 너비 및 높이, 위치를 Context Provider를 이용해서 전달해주고 있습니다.
+ TooltipBalloon에서 필요하지만 사용자의 편의를 위하여 props 사용을 지양할만한 부분인 setHover, tooltip의 너비 및 높이, 위치를 Context Provider를 이용해서 전달해주고 있습니다.
 
 
 ### Tooltip Option
@@ -199,6 +199,15 @@ const [disable, setDisable] = useState<boolean>(false);
 </div>
 ```
 
-### Overflow Tooltip
-
+## Trouble Shoot
+### overflow된 부분에서의 툴팁 표현
+신나게 툴팁들을 만든 뒤에 overflow scroll을 했는데, overflow된 부분에서 나타나지 않는 현상이 발생했다.   
+당황해서 position과 z-index값을 수정하였지만, 무심하게도 나타나지 않았다.   
+원인은 css에서 자식요소가 부모요소 밖으로는 z-index가 99999라도 절대 나타나지 않는 것.   
+그러면 어떻게 해결하면 좋을까? 부모 요소 바깥으로 요소를 만들어주면 될 것이라고 생각!   
+기존의 <Tooltip><TooltipBalloon></TooltipBallon></Tooltip>의 형태를 해치지 않고 부모 바깥에 TooltipBalloon이 나타나도록 하기 위하여 createPortal을 이용해서 root요소에 TooltipBalloon이 생기도록 하였다.   
+그러면 이 때 위치는 어떻게 설정해야 할까??   
+DOM요소를 접근하는 UseRef와 Context를 이용해서 위치에 접근하였다.   
+Tooltip에서 현재 Tooltip의 크기와 뷰포트에 상대적인 위치(top, left)를 가져와서 Context를 통하여 TooltipBalloon에 전달해주었다.   
+결과!!   
 ![overflowTooltip](https://github.com/dyFlower/tooltip/assets/112444362/72df9c7e-afc6-4688-a245-952079b7fe3c)
