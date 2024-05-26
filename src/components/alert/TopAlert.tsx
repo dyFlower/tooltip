@@ -1,8 +1,29 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
-
 import { useEffect } from "react";
 import styled from "styled-components";
+
+const StyledStopAlertWrap = styled.div<AlertProps>`
+  position: fixed;
+  display: ${(props) => (props.showAlert ? "flex" : "none")};
+  width: 100%;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+`;
+
+const StyledStopAlert = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 0 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: white;
+  background-color: #407dee;
+`;
 
 export default function TopAlert({ children, setShowAlert, showAlert }: AlertProps) {
   useEffect(() => {
@@ -10,31 +31,8 @@ export default function TopAlert({ children, setShowAlert, showAlert }: AlertPro
     return () => clearTimeout(timer);
   }, [showAlert]);
 
-  const StyledStopAlertWrap = styled.div<AlertProps>`
-    position: fixed;
-    display: ${(props) => (props.showAlert ? "flex" : "none")};
-    width: 100%;
-    height: 40px;
-    justify-content: center;
-    align-items: center;
-    top: 0;
-    left: 0;
-  `;
-  
-  const StyledStopAlert = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-right: 0 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    color: white;
-    background-color: #407dee;
-  `;
   return (
-    <StyledStopAlertWrap
-      showAlert={showAlert}
-    >
+    <StyledStopAlertWrap showAlert={showAlert}>
       <StyledStopAlert>
         <div>
           <FontAwesomeIcon
@@ -48,7 +46,7 @@ export default function TopAlert({ children, setShowAlert, showAlert }: AlertPro
             }}
           />
         </div>
-        <div style={{ padding: "0 10px" }}>{children} tooltip confirm clicked on Yes.</div>
+        <div style={{ padding: "0 10px" }}>{children}</div>
         <FontAwesomeIcon
           icon={faX}
           style={{ paddingRight: "10px", cursor: "pointer" }}

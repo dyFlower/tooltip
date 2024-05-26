@@ -1,11 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
-import { createPortal } from "react-dom";
-import TooltipBalloon from "./TooltipBalloon";
-import ContentTooltipBalloon from "./ContentTooltipBalloon";
-import TopAlert from "../alert/TopAlert";
+import { useTooltip } from "./TooltipProvider";
 
 const TooltipBox = styled.div<TooltipProps>`
   position: relative;
@@ -18,7 +13,9 @@ const TooltipBox = styled.div<TooltipProps>`
     props.hover ? (props.bgColor ? props.bgColor : "#1aab8a") : props.fontColor ? props.fontColor : "white"};
   border-radius: 4px;
   background-color: ${(props) => (props.hover ? "white" : props.bgColor || "#1aab8a")};
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
 
   &:before,
   &:after {
@@ -53,20 +50,33 @@ export default function Tootip({
   bgColor,
   width,
   fontColor,
-  direction,
   height,
   delay_timing,
   delay,
-  balloonBg,
-  balloonFontColor,
-  content,
   disable,
 }: TooltipProps) {
-  const [hover, setHover] = useState<boolean>(false);
-  const [show, setShow] = useState<boolean>(false);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const tooltip = useTooltip() || {
+    hover: false,
+    setHover: () => {},
+    show: false,
+    setShow: () => {},
+    position: { top: 0, left: 0 },
+    setPosition: () => {},
+    setTooltipWidth: () => {},
+    setTooltipHeight: () => {},
+  };
+
+  const { hover, setHover, setShow, setPosition, setTooltipWidth, setTooltipHeight } = tooltip;
   const ref = useRef<HTMLDivElement>(null);
-  const { top, left } = ref.current ? ref.current.getBoundingClientRect() : { top: 0, left: 0 };
+
+  useEffect(() => {
+    if (ref.current) {
+      const { top, left } = ref.current.getBoundingClientRect();
+      setPosition({ top, left });
+      setTooltipHeight(parseFloat(height));
+      setTooltipWidth(parseFloat(width));
+    }
+  }, [hover]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -84,11 +94,10 @@ export default function Tootip({
     return () => clearTimeout(timer);
   }, [hover]);
 
-  const rootElement = document.getElementById("root") as HTMLElement;
-
   return (
-    <div ref={ref}>
+    <div>
       <TooltipBox
+        ref={ref}
         onMouseEnter={() => {
           if (!disable) setHover(true);
         }}
@@ -102,60 +111,7 @@ export default function Tootip({
         fontColor={fontColor}
       >
         {children}
-        {content ? (
-          <ContentTooltipBalloon
-            balloonBg={balloonBg}
-            balloonFontColor={balloonFontColor}
-            show={show}
-            direction={direction}
-            width={width}
-            height={height}
-            setHover={setHover}
-            delay_timing={delay_timing}
-            top={top}
-            left={left}
-          >
-            <FontAwesomeIcon icon={faCircleExclamation} />
-            <span> Are you sure delete this task?</span>
-            <div style={{ textAlign: "right" }}>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowAlert(true);
-                }}
-                style={{ backgroundColor: "#1aab8a", border: "none", borderRadius: "4px", cursor: "pointer" }}
-              >
-                Yes
-              </button>
-            </div>
-          </ContentTooltipBalloon>
-        ) : (
-          <TooltipBalloon
-            balloonBg={balloonBg}
-            balloonFontColor={balloonFontColor}
-            show={show}
-            direction={direction}
-            width={width}
-            height={height}
-            setHover={setHover}
-            delay_timing={delay_timing}
-            top={top}
-            left={left}
-          >
-            <span>prompt text</span>
-            <br />
-            <span>prompt text</span>
-            <br />
-            <span>prompt text</span>
-          </TooltipBalloon>
-        )}
       </TooltipBox>
-      {createPortal(
-        <TopAlert setShowAlert={setShowAlert} showAlert={showAlert}>
-          {children}
-        </TopAlert>,
-        rootElement,
-      )}
     </div>
   );
 }

@@ -1,22 +1,25 @@
 import { createPortal } from "react-dom";
 import styled, { css } from "styled-components";
+import { useTooltip } from "./TooltipProvider";
 
 const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
   position: fixed;
   display: ${(props) => (props.show ? "block" : "none")};
-  width: auto;
+  width: fit-content;
+  height: fit-content;
   white-space: nowrap;
   padding: 14px 12px;
   text-align: center;
-  top: ${(props) => props.top + parseFloat(props.height as string)}px;
+  top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
   font-size: 18px;
   color: ${(props) => (props.balloonFontColor ? props.balloonFontColor : "white")};
   border-radius: 4px;
   background-color: ${(props) => (props.balloonBg ? props.balloonBg : "#1a2735")};
-  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.1215686275), 0 6px 16px rgba(0, 0, 0, 0.0784313725),
+  box-shadow:
+    0 3px 6px -4px rgba(0, 0, 0, 0.1215686275),
+    0 6px 16px rgba(0, 0, 0, 0.0784313725),
     0 9px 28px 6px rgba(0, 0, 0, 0.0509803922);
-
   z-index: 10;
 
   &:before {
@@ -33,7 +36,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
     switch (props.direction) {
       case "TL":
         return css`
-          transform: translate(0, calc(-100% - ${parseFloat(props.height as string)}px - 12px));
+          transform: translate(0, calc(-100% - 12px));
           &:before {
             bottom: -12px;
             left: 12px;
@@ -42,10 +45,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       case "Top":
         return css`
-          transform: translate(
-            calc((${parseFloat(props.width as string)}px - 100%) / 2),
-            calc(-100% - ${parseFloat(props.height as string)}px - 12px)
-          );
+          transform: translate(calc((${props.tooltipWidth}px - 100%) / 2), calc(-100% - 12px));
           &:before {
             bottom: -12px;
             left: calc(50% - 6px);
@@ -54,10 +54,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       case "TR":
         return css`
-          transform: translate(
-            calc(${parseFloat(props.width as string)}px - 100%),
-            calc(-100% - ${parseFloat(props.height as string)}px - 12px)
-          );
+          transform: translate(calc((${props.tooltipWidth}px - 100%)), calc(-100% - 12px));
           &:before {
             bottom: -12px;
             right: 12px;
@@ -66,7 +63,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       case "LT":
         return css`
-          transform: translate(calc(-100% - 12px), -${parseFloat(props.height as string)}px);
+          transform: translate(calc(-100% - 12px), 0);
           &:before {
             top: 6px;
             right: -11px;
@@ -75,7 +72,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       case "Left":
         return css`
-          transform: translate(calc(-100% - 12px), calc(-50% - ${parseFloat(props.height as string) / 2}px));
+          transform: translate(calc(-100% - 12px), calc((${props.tooltipHeight}px - 100%) / 2));
           &:before {
             top: calc(50% - 6px);
             right: -11px;
@@ -84,7 +81,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       case "LB":
         return css`
-          transform: translate(calc(-100% - 12px), -100%);
+          transform: translate(calc(-100% - 12px), calc((${props.tooltipHeight}px - 100%)));
           &:before {
             bottom: 6px;
             right: -11px;
@@ -93,10 +90,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       case "RT":
         return css`
-          transform: translate(
-            calc(${parseFloat(props.width as string)}px + 12px),
-            -${parseFloat(props.height as string)}px
-          );
+          transform: translate(calc(${props.tooltipWidth}px + 12px), 0);
           &:before {
             top: 6px;
             left: -11px;
@@ -105,10 +99,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       case "Right":
         return css`
-          transform: translate(
-            calc(${parseFloat(props.width as string)}px + 12px),
-            calc(-50% - ${parseFloat(props.height as string) / 2}px)
-          );
+          transform: translate(calc(${props.tooltipWidth}px + 12px), calc((${props.tooltipHeight}px - 100%) / 2));
           &:before {
             top: calc(50% - 6px);
             left: -11px;
@@ -117,7 +108,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       case "RB":
         return css`
-          transform: translate(calc(${parseFloat(props.width as string)}px + 12px), -100%);
+          transform: translate(calc(${props.tooltipWidth}px + 12px), calc((${props.tooltipHeight}px - 100%)));
           &:before {
             bottom: 6px;
             left: -11px;
@@ -126,7 +117,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       case "BL":
         return css`
-          transform: translate(0, 12px);
+          transform: translate(0, calc(${props.tooltipHeight}px + 12px));
           &:before {
             top: -12px;
             left: 12px;
@@ -135,7 +126,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       case "Bottom":
         return css`
-          transform: translate(calc((${parseFloat(props.width as string)}px - 100%) / 2), 12px);
+          transform: translate(calc((${props.tooltipWidth}px - 100%) / 2), calc(${props.tooltipHeight}px + 12px));
           &:before {
             top: -12px;
             left: calc(50% - 6px);
@@ -144,7 +135,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       case "BR":
         return css`
-          transform: translate(calc(${parseFloat(props.width as string)}px - 100%), 12px);
+          transform: translate(calc((${props.tooltipWidth}px - 100%)), calc(${props.tooltipHeight}px + 12px));
           &:before {
             top: -12px;
             right: 12px;
@@ -153,10 +144,7 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
         `;
       default:
         return css`
-          transform: translate(
-            calc((${parseFloat(props.width as string)}px - 100%) / 2),
-            calc(-100% - ${parseFloat(props.height as string)}px - 12px)
-          );
+          transform: translate(calc((${props.tooltipWidth}px - 100%) / 2), calc(-100% - 12px));
           &:before {
             bottom: -12px;
             left: calc(50% - 6px);
@@ -168,16 +156,23 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
 `;
 export default function CustomTooltipBalloon({
   children,
-  show,
-  setHover,
   direction,
   width,
   height,
   balloonBg,
   balloonFontColor,
-  top,
-  left,
 }: TooltipBalloonProps) {
+  const tooltip = useTooltip() || {
+    hover: false,
+    setHover: () => {},
+    show: false,
+    setShow: () => {},
+    position: { top: 0, left: 0 },
+    setPosition: () => {},
+    tooltipWidth: 0,
+    tooltipHeight: 0,
+  };
+  const { setHover, show, position, tooltipHeight, tooltipWidth } = tooltip;
   const rootElement = document.getElementById("root") as HTMLElement;
   return createPortal(
     <StyledCustomTooltipBalloon
@@ -187,8 +182,10 @@ export default function CustomTooltipBalloon({
       height={height}
       balloonBg={balloonBg}
       balloonFontColor={balloonFontColor}
-      top={top}
-      left={left}
+      top={position.top}
+      left={position.left}
+      tooltipHeight={tooltipHeight}
+      tooltipWidth={tooltipWidth}
       onMouseEnter={() => {
         setHover(true);
       }}

@@ -8,24 +8,22 @@ interface TooltipProps {
   direction?: string;
   delay?: number;
   delay_timing?: string;
-  balloonBg?: string;
-  balloonFontColor?: string;
-  content?: string;
   disable?: boolean;
 }
 interface TooltipBalloonProps {
   children: ReactNode;
-  top: number;
-  left: number;
+  top?: number;
+  left?: number;
   balloonBg?: string;
   balloonFontColor?: string;
   fontColor?: string;
   show?: boolean;
-  width: string;
-  height: string;
+  width?: string;
+  height?: string;
   direction?: string;
   setHover?: Dispatch<SetStateAction<boolean>>;
-  delay_timing?: string;
+  tooltipHeight?: number;
+  tooltipWidth?: number;
 }
 interface AlertProps {
   children: ReactNode;
