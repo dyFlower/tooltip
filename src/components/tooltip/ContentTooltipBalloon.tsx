@@ -157,8 +157,6 @@ const StyledCustomTooltipBalloon = styled.div<TooltipBalloonProps>`
 export default function CustomTooltipBalloon({
   children,
   direction,
-  width,
-  height,
   balloonBg,
   balloonFontColor,
 }: TooltipBalloonProps) {
@@ -178,8 +176,6 @@ export default function CustomTooltipBalloon({
     <StyledCustomTooltipBalloon
       show={show}
       direction={direction}
-      width={width}
-      height={height}
       balloonBg={balloonBg}
       balloonFontColor={balloonFontColor}
       top={position.top}

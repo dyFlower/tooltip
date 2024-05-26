@@ -5,7 +5,6 @@ interface TooltipProps {
   bgColor?: string;
   fontColor?: string;
   hover?: boolean;
-  direction?: string;
   delay?: number;
   delay_timing?: string;
   disable?: boolean;
@@ -16,10 +15,7 @@ interface TooltipBalloonProps {
   left?: number;
   balloonBg?: string;
   balloonFontColor?: string;
-  fontColor?: string;
   show?: boolean;
-  width?: string;
-  height?: string;
   direction?: string;
   setHover?: Dispatch<SetStateAction<boolean>>;
   tooltipHeight?: number;

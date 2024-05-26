@@ -21,11 +21,11 @@ export default function ContnetsTooltipSection() {
       }}
     >
       <TooltipProvider>
-        <Tooltip width="70px" height="20px" direction="Top" delay_timing="hover">
+        <Tooltip width="70px" height="20px" delay_timing="hover">
           Top
           <ContentTooltipBalloon direction="Top" balloonBg="white" balloonFontColor="gray">
             <FontAwesomeIcon icon={faCircleExclamation} />
-            <span>Are you sure delete this task?</span>
+            <span> Are you sure delete this task?</span>
             <div style={{ textAlign: "right" }}>
               <button
                 type="button"
@@ -43,11 +43,11 @@ export default function ContnetsTooltipSection() {
       </TooltipProvider>
       <div style={{ display: "flex", gap: "70px" }}>
         <TooltipProvider>
-          <Tooltip width="70px" height="20px" direction="Left" delay_timing="hover">
+          <Tooltip width="70px" height="20px" delay_timing="hover">
             Left
             <ContentTooltipBalloon direction="Left" balloonBg="white" balloonFontColor="gray">
               <FontAwesomeIcon icon={faCircleExclamation} />
-              <span>Are you sure delete this task?</span>
+              <span> Are you sure delete this task?</span>
               <div style={{ textAlign: "right" }}>
                 <button
                   type="button"
@@ -64,11 +64,11 @@ export default function ContnetsTooltipSection() {
           </Tooltip>
         </TooltipProvider>
         <TooltipProvider>
-          <Tooltip width="70px" height="20px" direction="Right" delay_timing="hover">
+          <Tooltip width="70px" height="20px" delay_timing="hover">
             Right
             <ContentTooltipBalloon direction="Right" balloonBg="white" balloonFontColor="gray">
               <FontAwesomeIcon icon={faCircleExclamation} />
-              <span>Are you sure delete this task?</span>
+              <span> Are you sure delete this task?</span>
               <div style={{ textAlign: "right" }}>
                 <button
                   type="button"
@@ -86,11 +86,11 @@ export default function ContnetsTooltipSection() {
         </TooltipProvider>
       </div>
       <TooltipProvider>
-        <Tooltip width="70px" height="20px" direction="Bottom" delay_timing="hover">
+        <Tooltip width="70px" height="20px" delay_timing="hover">
           Bottom
           <ContentTooltipBalloon direction="Bottom" balloonBg="white" balloonFontColor="gray">
             <FontAwesomeIcon icon={faCircleExclamation} />
-            <span>Are you sure delete this task?</span>
+            <span> Are you sure delete this task?</span>
             <div style={{ textAlign: "right" }}>
               <button
                 type="button"
